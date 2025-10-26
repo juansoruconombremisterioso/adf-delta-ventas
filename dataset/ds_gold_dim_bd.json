@@ -1,0 +1,39 @@
+{
+	"name": "ds_gold_dim_bd",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_bd",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "fecha",
+				"type": "date"
+			},
+			{
+				"name": "año",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "mes",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_bd"
+		}
+	}
+}

@@ -1,0 +1,44 @@
+{
+	"name": "ds_gold_dim_productos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_productos",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_catmant",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "varchar"
+			},
+			{
+				"name": "cost",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_line",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_productos"
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "ds_gold_dim_location",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_location",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cntry",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_location"
+		}
+	}
+}

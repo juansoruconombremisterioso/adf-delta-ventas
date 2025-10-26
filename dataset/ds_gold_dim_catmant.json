@@ -1,0 +1,40 @@
+{
+	"name": "ds_gold_dim_catmant",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_catmant",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_cat",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_subcat",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_mant",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_catmant"
+		}
+	}
+}

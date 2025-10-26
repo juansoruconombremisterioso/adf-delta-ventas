@@ -1,0 +1,29 @@
+{
+	"name": "ds_gold_dim_subcat",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_subcat",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "subcat",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_subcat"
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "ds_gold_dim_maritalstatus",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "GOLD"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_maritalstatus",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "maritalstatus",
+				"type": "char"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD",
+			"table": "dim_maritalstatus"
+		}
+	}
+}
