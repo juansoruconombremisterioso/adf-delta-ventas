@@ -1,0 +1,151 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"folder": {
+			"name": "GOLD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_silver_clientes",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_bd",
+						"type": "DatasetReference"
+					},
+					"name": "bd"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_location",
+						"type": "DatasetReference"
+					},
+					"name": "location"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_gender",
+						"type": "DatasetReference"
+					},
+					"name": "gender"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_maritalstatus",
+						"type": "DatasetReference"
+					},
+					"name": "maritalstatus"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_clientes",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "lookup2"
+				},
+				{
+					"name": "lookup3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          cst_id as integer,",
+				"          cst_key as string,",
+				"          cst_firstname as string,",
+				"          cst_lastname as string,",
+				"          cst_marital_status as string,",
+				"          cst_gndr as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source(output(",
+				"          id_bd as integer,",
+				"          fecha as date,",
+				"          {año} as integer,",
+				"          mes as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT id_bd, fecha, año, mes FROM GOLD.dim_bd',",
+				"     format: 'query') ~> bd",
+				"source(output(",
+				"          id_location as integer,",
+				"          cntry as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT id_location, cntry FROM GOLD.dim_location',",
+				"     format: 'query') ~> location",
+				"source(output(",
+				"          id_gender as integer,",
+				"          gender as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT id_gender, gender FROM GOLD.dim_gender',",
+				"     format: 'query') ~> gender",
+				"source(output(",
+				"          id_maritalstatus as integer,",
+				"          maritalstatus as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT id_maritalstatus, maritalstatus FROM GOLD.dim_maritalstatus',",
+				"     format: 'query') ~> maritalstatus",
+				"source1, gender lookup(cst_gndr == gender,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1, maritalstatus lookup(cst_marital_status == maritalstatus,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2",
+				"lookup2, location lookup(cst_key == cntry,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_clientes as integer,",
+				"          firstname as string,",
+				"          lastname as string,",
+				"          id_maritalstatus as integer,",
+				"          id_gender as integer,",
+				"          id_bd as integer,",
+				"          id_location as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
