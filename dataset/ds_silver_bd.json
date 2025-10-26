@@ -17,15 +17,11 @@
 			},
 			{
 				"name": "BDATE",
-				"type": "varchar"
-			},
-			{
-				"name": "GEN",
-				"type": "varchar"
+				"type": "date"
 			}
 		],
 		"typeProperties": {
-			"schema": "BRONZE",
+			"schema": "SILVER",
 			"table": "BDGEN"
 		}
 	}
