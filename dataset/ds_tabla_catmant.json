@@ -1,0 +1,36 @@
+{
+	"name": "ds_tabla_catmant",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_ventas",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "BRONZE"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "varchar"
+			},
+			{
+				"name": "CAT",
+				"type": "varchar"
+			},
+			{
+				"name": "SUBCAT",
+				"type": "varchar"
+			},
+			{
+				"name": "MAINTENANCE",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "BRONZE",
+			"table": "CATMANT"
+		}
+	}
+}
