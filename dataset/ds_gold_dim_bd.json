@@ -21,12 +21,17 @@
 				"type": "date"
 			},
 			{
-				"name": "año",
+				"name": "anio",
 				"type": "int",
 				"precision": 10
 			},
 			{
 				"name": "mes",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "dia",
 				"type": "int",
 				"precision": 10
 			}
