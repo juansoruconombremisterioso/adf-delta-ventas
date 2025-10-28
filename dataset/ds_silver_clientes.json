@@ -17,7 +17,11 @@
 				"precision": 10
 			},
 			{
-				"name": "cst_key",
+				"name": "BDATE",
+				"type": "date"
+			},
+			{
+				"name": "cntry",
 				"type": "varchar"
 			},
 			{
