@@ -12,48 +12,48 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id_ventas",
+				"name": "id_venta",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "ord_num",
+				"name": "id_cliente",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_producto",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_bd",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id_catmant",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cantidad",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "precio_unitario",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "canal_venta",
 				"type": "nvarchar"
 			},
 			{
-				"name": "id_productos",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "id_clientes",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "id_order",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "id_ship",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "id_sales",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "quantity",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "price",
-				"type": "int",
-				"precision": 10
+				"name": "ord_dt",
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
