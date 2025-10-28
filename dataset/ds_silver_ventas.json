@@ -16,7 +16,7 @@
 				"type": "varchar"
 			},
 			{
-				"name": "sls_prd_key",
+				"name": "prd_nm",
 				"type": "varchar"
 			},
 			{
