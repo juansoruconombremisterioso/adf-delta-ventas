@@ -12,9 +12,13 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id_clientes",
+				"name": "id_cliente",
 				"type": "int",
 				"precision": 10
+			},
+			{
+				"name": "cst_id",
+				"type": "nvarchar"
 			},
 			{
 				"name": "firstname",
@@ -25,24 +29,20 @@
 				"type": "nvarchar"
 			},
 			{
-				"name": "id_maritalstatus",
-				"type": "int",
-				"precision": 10
+				"name": "marital_status",
+				"type": "char"
 			},
 			{
-				"name": "id_gender",
-				"type": "int",
-				"precision": 10
+				"name": "gender",
+				"type": "char"
 			},
 			{
-				"name": "id_bd",
-				"type": "int",
-				"precision": 10
+				"name": "fecha_nacimiento",
+				"type": "date"
 			},
 			{
-				"name": "id_location",
-				"type": "int",
-				"precision": 10
+				"name": "clocation",
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
