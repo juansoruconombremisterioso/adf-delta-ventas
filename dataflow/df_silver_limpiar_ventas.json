@@ -13,6 +13,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_silver_productos",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -30,6 +37,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "lookup1"
 				}
 			],
 			"scriptLines": [
@@ -47,6 +57,18 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
+				"source(output(",
+				"          prd_id as integer,",
+				"          code as string,",
+				"          prd_key as string,",
+				"          prd_nm as string,",
+				"          prd_cost as integer,",
+				"          prd_line as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source2",
 				"derivedColumn1 cast(output(",
 				"          sls_cust_id as integer,",
 				"          sls_order_dt as integer,",
@@ -58,11 +80,15 @@
 				"     errors: true) ~> cast1",
 				"source1 derive(sls_ord_num = trim(sls_ord_num),",
 				"          sls_prd_key = trim(sls_prd_key)) ~> derivedColumn1",
-				"cast1 sink(allowSchemaDrift: true,",
+				"cast1, source2 lookup(sls_prd_key == prd_key,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          sls_ord_num as string,",
-				"          sls_prd_key as string,",
+				"          prd_nm as string,",
 				"          sls_cust_id as integer,",
 				"          sls_order_dt as integer,",
 				"          sls_ship_dt as integer,",
@@ -80,7 +106,7 @@
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          sls_ord_num,",
-				"          sls_prd_key,",
+				"          prd_nm,",
 				"          sls_cust_id,",
 				"          sls_order_dt,",
 				"          sls_ship_dt,",

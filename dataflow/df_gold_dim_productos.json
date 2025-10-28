@@ -28,8 +28,7 @@
 			"scriptLines": [
 				"source(output(",
 				"          prd_id as integer,",
-				"          cat_code as string,",
-				"          subcat_code as string,",
+				"          code as string,",
 				"          prd_key as string,",
 				"          prd_nm as string,",
 				"          prd_cost as integer,",

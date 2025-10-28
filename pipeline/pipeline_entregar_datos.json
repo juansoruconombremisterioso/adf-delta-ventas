@@ -22,7 +22,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "DELETE FROM GOLD.dim_clientes;\nDELETE FROM GOLD.dim_bd;\nDELETE FROM GOLD.hechos_ventas;\nDELETE FROM GOLD.dim_productos;\nDELETE FROM GOLD.dim_catman;"
+							"text": "DELETE FROM GOLD.dim_clientes;\nDELETE FROM GOLD.dim_bd;\nDELETE FROM GOLD.hechos_ventas;\nDELETE FROM GOLD.dim_productos;\nDELETE FROM GOLD.dim_catmant;"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
