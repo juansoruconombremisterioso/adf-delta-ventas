@@ -17,11 +17,7 @@
 				"precision": 10
 			},
 			{
-				"name": "cat_code",
-				"type": "varchar"
-			},
-			{
-				"name": "subcat_code",
+				"name": "code",
 				"type": "varchar"
 			},
 			{
