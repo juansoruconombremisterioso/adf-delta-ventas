@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "df_gold_dim_clientes",
 	"properties": {
 		"folder": {
 			"name": "GOLD"
@@ -13,34 +13,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_gold_dim_bd",
-						"type": "DatasetReference"
-					},
-					"name": "bd"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_gold_dim_location",
-						"type": "DatasetReference"
-					},
-					"name": "location"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_gold_dim_gender",
-						"type": "DatasetReference"
-					},
-					"name": "gender"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_gold_dim_maritalstatus",
-						"type": "DatasetReference"
-					},
-					"name": "maritalstatus"
 				}
 			],
 			"sinks": [
@@ -52,90 +24,33 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "lookup1"
-				},
-				{
-					"name": "lookup2"
-				},
-				{
-					"name": "lookup3"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          cst_id as integer,",
-				"          cst_key as string,",
 				"          cst_firstname as string,",
 				"          cst_lastname as string,",
 				"          cst_marital_status as string,",
-				"          cst_gndr as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
-				"source(output(",
-				"          id_bd as integer,",
-				"          fecha as date,",
-				"          {año} as integer,",
-				"          mes as integer",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT id_bd, fecha, año, mes FROM GOLD.dim_bd',",
-				"     format: 'query') ~> bd",
-				"source(output(",
-				"          id_location as integer,",
+				"          cst_gndr as string,",
+				"          BDATE as date,",
 				"          cntry as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT id_location, cntry FROM GOLD.dim_location',",
-				"     format: 'query') ~> location",
-				"source(output(",
-				"          id_gender as integer,",
-				"          gender as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT id_gender, gender FROM GOLD.dim_gender',",
-				"     format: 'query') ~> gender",
-				"source(output(",
-				"          id_maritalstatus as integer,",
-				"          maritalstatus as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT id_maritalstatus, maritalstatus FROM GOLD.dim_maritalstatus',",
-				"     format: 'query') ~> maritalstatus",
-				"source1, gender lookup(cst_gndr == gender,",
-				"     multiple: false,",
-				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookup1",
-				"lookup1, maritalstatus lookup(cst_marital_status == maritalstatus,",
-				"     multiple: false,",
-				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookup2",
-				"lookup2, location lookup(cst_key == cntry,",
-				"     multiple: false,",
-				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookup3",
-				"lookup3 sink(allowSchemaDrift: true,",
+				"     query: 'SELECT DISTINCT cst_id, cst_firstname, cst_lastname, cst_marital_status, cst_gndr, BDATE, cntry FROM SILVER.CLIENTES',",
+				"     format: 'query') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          id_clientes as integer,",
+				"          id_cliente as integer,",
+				"          cst_id as string,",
 				"          firstname as string,",
 				"          lastname as string,",
-				"          id_maritalstatus as integer,",
-				"          id_gender as integer,",
-				"          id_bd as integer,",
-				"          id_location as integer",
+				"          marital_status as string,",
+				"          gender as string,",
+				"          fecha_nacimiento as date,",
+				"          clocation as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -144,7 +59,16 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          cst_id,",
+				"          firstname = cst_firstname,",
+				"          lastname = cst_lastname,",
+				"          marital_status = cst_marital_status,",
+				"          gender = cst_gndr,",
+				"          fecha_nacimiento = BDATE,",
+				"          clocation = cntry",
+				"     )) ~> sink1"
 			]
 		}
 	}

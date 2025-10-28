@@ -38,7 +38,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 derive(cid = trim(cid),",
+				"source1 derive(cid = replace(trim(cid), '-', ''),",
 				"          cntry = trim(cntry)) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",

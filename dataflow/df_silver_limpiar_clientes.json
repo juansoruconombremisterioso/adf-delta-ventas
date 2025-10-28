@@ -13,6 +13,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_silver_bd",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_silver_location",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
 				}
 			],
 			"sinks": [
@@ -30,6 +44,12 @@
 				},
 				{
 					"name": "cast1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "lookup2"
 				}
 			],
 			"scriptLines": [
@@ -45,7 +65,23 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 derive(cst_key = trim(cst_key),",
+				"source(output(",
+				"          CID as string,",
+				"          BDATE as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source2",
+				"source(output(",
+				"          cid as string,",
+				"          cntry as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source3",
+				"lookup2 derive(cst_key = trim(cst_key),",
 				"          cst_firstname = trim(cst_firstname),",
 				"          cst_lastname = trim(cst_lastname),",
 				"          cst_marital_status = trim(cst_marital_status),",
@@ -54,11 +90,20 @@
 				"          cst_id as integer",
 				"     ),",
 				"     errors: true) ~> cast1",
+				"source1, source2 lookup(cst_key == CID,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1, source3 lookup(cst_key == source3@cid,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2",
 				"cast1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          cst_id as integer,",
-				"          cst_key as string,",
+				"          BDATE as date,",
+				"          cntry as string,",
 				"          cst_firstname as string,",
 				"          cst_lastname as string,",
 				"          cst_marital_status as string,",
@@ -74,7 +119,8 @@
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          cst_id,",
-				"          cst_key,",
+				"          BDATE,",
+				"          cntry,",
 				"          cst_firstname,",
 				"          cst_lastname,",
 				"          cst_marital_status,",

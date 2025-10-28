@@ -1,5 +1,5 @@
 {
-	"name": "df_gold_dim_bd",
+	"name": "df_gold_dim_productos",
 	"properties": {
 		"folder": {
 			"name": "GOLD"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_silver_bd",
+						"referenceName": "ds_silver_productos",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -18,37 +18,35 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_gold_dim_bd",
+						"referenceName": "ds_gold_dim_productos",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "derivedColumn1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          BDATE as date",
+				"          prd_id as integer,",
+				"          cat_code as string,",
+				"          subcat_code as string,",
+				"          prd_key as string,",
+				"          prd_nm as string,",
+				"          prd_cost as integer,",
+				"          prd_line as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT DISTINCT BDATE FROM SILVER.BDGEN',",
-				"     format: 'query') ~> source1",
-				"source1 derive({año} = year(BDATE),",
-				"          mes = month(BDATE),",
-				"          dia = dayOfMonth(BDATE)) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     format: 'table') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          id_bd as integer,",
-				"          fecha as date,",
-				"          anio as integer,",
-				"          mes as integer,",
-				"          dia as integer",
+				"          id_producto as integer,",
+				"          prd_key as string,",
+				"          nombre as string,",
+				"          costo as decimal(18,0),",
+				"          linea as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -59,10 +57,10 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          fecha = BDATE,",
-				"          anio = {año},",
-				"          mes,",
-				"          dia",
+				"          prd_key,",
+				"          nombre = prd_nm,",
+				"          costo = prd_cost,",
+				"          linea = prd_line",
 				"     )) ~> sink1"
 			]
 		}

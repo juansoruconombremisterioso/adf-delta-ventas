@@ -1,0 +1,185 @@
+{
+	"name": "df_gold_hechos_ventas",
+	"properties": {
+		"folder": {
+			"name": "GOLD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_silver_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_bd",
+						"type": "DatasetReference"
+					},
+					"name": "bd"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_catmant",
+						"type": "DatasetReference"
+					},
+					"name": "catmant"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_clientes",
+						"type": "DatasetReference"
+					},
+					"name": "clientes"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_gold_dim_productos",
+						"type": "DatasetReference"
+					},
+					"name": "productos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_gold_hechos_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "lookup2"
+				},
+				{
+					"name": "lookup3"
+				},
+				{
+					"name": "lookup4"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          sls_ord_num as string,",
+				"          sls_prd_key as string,",
+				"          sls_cust_id as integer,",
+				"          sls_order_dt as integer,",
+				"          sls_ship_dt as integer,",
+				"          sls_sales as integer,",
+				"          sls_quantity as integer,",
+				"          sls_price as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source(output(",
+				"          id_bd as integer,",
+				"          fecha as date,",
+				"          anio as integer,",
+				"          mes as integer,",
+				"          dia as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> bd",
+				"source(output(",
+				"          id_catmant as integer,",
+				"          code as string,",
+				"          categoria as string,",
+				"          subcategoria as string,",
+				"          mantenimiento as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> catmant",
+				"source(output(",
+				"          id_cliente as integer,",
+				"          cst_id as string,",
+				"          firstname as string,",
+				"          lastname as string,",
+				"          marital_status as string,",
+				"          gender as string,",
+				"          fecha_nacimiento as date,",
+				"          clocation as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> clientes",
+				"source(output(",
+				"          id_producto as integer,",
+				"          prd_key as string,",
+				"          nombre as string,",
+				"          costo as decimal(18,0),",
+				"          linea as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> productos",
+				"source1 cast(output(",
+				"          sls_cust_id as string,",
+				"          sls_price as decimal(10,0)",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1, clientes lookup(sls_cust_id == cst_id,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1, bd lookup(fecha_nacimiento == fecha,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2",
+				"lookup2, productos lookup(sls_prd_key == prd_key,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3, catmant lookup(sls_prd_key == code,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup4",
+				"lookup4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_venta as integer,",
+				"          id_cliente as integer,",
+				"          id_producto as integer,",
+				"          id_bd as integer,",
+				"          id_catmant as integer,",
+				"          cantidad as integer,",
+				"          precio_unitario as decimal(18,0),",
+				"          canal_venta as string,",
+				"          ord_dt as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          cantidad = sls_quantity,",
+				"          precio_unitario = sls_price,",
+				"          canal_venta = sls_ship_dt,",
+				"          ord_dt = sls_order_dt",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
