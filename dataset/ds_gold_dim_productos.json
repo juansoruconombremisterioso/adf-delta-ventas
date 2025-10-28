@@ -12,28 +12,27 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id_productos",
+				"name": "id_producto",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "id_catmant",
-				"type": "int",
-				"precision": 10
+				"name": "prd_key",
+				"type": "nvarchar"
 			},
 			{
-				"name": "name",
-				"type": "varchar"
+				"name": "nombre",
+				"type": "nvarchar"
 			},
 			{
-				"name": "cost",
-				"type": "int",
-				"precision": 10
+				"name": "costo",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 0
 			},
 			{
-				"name": "id_line",
-				"type": "int",
-				"precision": 10
+				"name": "linea",
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
