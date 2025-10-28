@@ -17,19 +17,20 @@
 				"precision": 10
 			},
 			{
-				"name": "id_cat",
-				"type": "int",
-				"precision": 10
+				"name": "code",
+				"type": "nvarchar"
 			},
 			{
-				"name": "id_subcat",
-				"type": "int",
-				"precision": 10
+				"name": "categoria",
+				"type": "nvarchar"
 			},
 			{
-				"name": "id_mant",
-				"type": "int",
-				"precision": 10
+				"name": "subcategoria",
+				"type": "nvarchar"
+			},
+			{
+				"name": "mantenimiento",
+				"type": "nvarchar"
 			}
 		],
 		"typeProperties": {
