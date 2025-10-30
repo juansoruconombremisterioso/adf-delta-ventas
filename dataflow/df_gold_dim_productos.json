@@ -56,7 +56,7 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          prd_key,",
+				"          prd_key = code,",
 				"          nombre = prd_nm,",
 				"          costo = prd_cost,",
 				"          linea = prd_line",
